@@ -1,0 +1,21 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t aidario/client -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true aidario/client npm test
+
+after_success:
+  - docker build -t aidario/client ./client
+  - docker build -t aidario/server ./server
+  - docker build -t aidario/worker ./worker
+  - docker build -t aidario/nginx ./nginx
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push aidario/client
+  - docker push aidario/server
+  - docker push aidario/worker
+  - docker push aidario/nginx
