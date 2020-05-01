@@ -19,3 +19,16 @@ after_success:
   - docker push aidario/server
   - docker push aidario/worker
   - docker push aidario/nginx
+
+deploy:
+  edge: true
+  provider: elasticbeanstalk
+  region: us-east-2
+  app: complex
+  env: Complex-env
+  bucket_name: elasticbeanstalk-us-east-2-174879070563
+  bucket_path: aidario-docker-react
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
